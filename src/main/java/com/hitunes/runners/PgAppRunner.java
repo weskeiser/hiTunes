@@ -1,8 +1,6 @@
 package com.hitunes.runners;
 
-import com.hitunes.models.customer.Customer;
 import com.hitunes.repositories.interfaces.CustomerRepo;
-import java.util.Optional;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -18,8 +16,11 @@ public class PgAppRunner implements ApplicationRunner {
   @Override
   public void run(ApplicationArguments args) throws Exception {
 
-    Optional<Customer> customer = customerRepo.getById(1);
-    System.out.println(customer);
+    // Optional<Customer> customer = customerRepo.getById(1);
+    // System.out.println(customer);
+
+    var customersByName = customerRepo.getByName("Luís", "Gonçalves");
+    System.out.println(customersByName);
 
     // var customers = customerRepo.getAll();
     // System.out.println(customers);

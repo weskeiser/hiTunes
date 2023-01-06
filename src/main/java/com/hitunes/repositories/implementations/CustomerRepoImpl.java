@@ -32,9 +32,39 @@ public class CustomerRepoImpl implements CustomerRepo {
   }
 
   @Override
-  public Optional<Customer> getByName(String name) {
-    // TODO Auto-generated method stub
-    return null;
+  public List<Customer> getByName(String firstName, String lastName) {
+
+    List<Customer> customers = new ArrayList<>();
+
+    var query = "select * from customer where first_name = ? and last_name = ? ";
+
+    try (var conn = DriverManager.getConnection(url, username, password)) {
+
+      var statement = conn.prepareStatement(query);
+      statement.setString(1, firstName);
+      statement.setString(2, lastName);
+
+      var res = statement.executeQuery();
+
+      while (res.next()) {
+        Customer customer =
+            new Customer(
+                res.getInt("customer_id"),
+                res.getString("phone"),
+                res.getString("postal_code"),
+                res.getString("address"),
+                res.getString("country"),
+                res.getString("first_name"),
+                res.getString("last_name"),
+                res.getString("email"));
+
+        customers.add(customer);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return customers;
   }
 
   @Override
