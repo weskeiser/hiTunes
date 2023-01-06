@@ -5,9 +5,11 @@ import java.util.*;
 
 public interface CustomerRepo extends CrudRepo<Customer, Integer> {
 
-  List<Customer> getByName(String firstName, String lastName);
+  List<Customer> getByName(String lastName, String firstName);
 
-  List<Customer> getByIds(List<Integer> ids, int limit, int offset);
+  List<Customer> getByIds(List<Integer> ids);
+
+  List<Customer> getPage(int offset, int limit);
 
   Customer getTopSpender(int id);
 

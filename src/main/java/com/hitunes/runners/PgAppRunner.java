@@ -19,14 +19,17 @@ public class PgAppRunner implements ApplicationRunner {
     // Optional<Customer> customer = customerRepo.getById(1);
     // System.out.println(customer);
 
-    var customersByName = customerRepo.getByName("Luís", "Gonçalves");
-    System.out.println(customersByName);
+    // var customersByName = customerRepo.getByName("Gonçalves", "Luís");
+    // System.out.println(customersByName);
 
     // var customers = customerRepo.getAll();
     // System.out.println(customers);
 
     // List<Integer> ids = List.of(1, 2, 3);
-    // var customersByIds = customerRepo.getByIds(ids, 1, 2);
+    // var customersByIds = customerRepo.getByIds(ids);
     // System.out.println(customersByIds);
+
+    // var customerPage = customerRepo.getPage(0, 10);
+    // System.out.println(customerPage);
   }
 }

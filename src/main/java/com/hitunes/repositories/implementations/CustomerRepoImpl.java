@@ -27,22 +27,22 @@ public class CustomerRepoImpl implements CustomerRepo {
   }
 
   @Override
-  public Optional<Customer> get(Customer object) {
+  public Optional<Customer> get(Customer customer) {
     return null;
   }
 
   @Override
-  public List<Customer> getByName(String firstName, String lastName) {
+  public List<Customer> getByName(String lastName, String firstName) {
 
     List<Customer> customers = new ArrayList<>();
 
-    var query = "select * from customer where first_name = ? and last_name = ? ";
+    var query = "select * from customer where last_name = ? and first_name = ? ";
 
     try (var conn = DriverManager.getConnection(url, username, password)) {
 
       var statement = conn.prepareStatement(query);
-      statement.setString(1, firstName);
-      statement.setString(2, lastName);
+      statement.setString(1, lastName);
+      statement.setString(2, firstName);
 
       var res = statement.executeQuery();
 
@@ -98,8 +98,44 @@ public class CustomerRepoImpl implements CustomerRepo {
     return Optional.ofNullable(customer);
   }
 
+  public List<Customer> getPage(int offset, int limit) {
+
+    List<Customer> customers = new ArrayList<>();
+
+    var query = "select * from customer ORDER BY last_name OFFSET ? LIMIT ?; ";
+
+    try (var conn = DriverManager.getConnection(url, username, password)) {
+
+      var statement = conn.prepareStatement(query);
+      statement.setInt(1, offset);
+      statement.setInt(2, limit);
+
+      var res = statement.executeQuery();
+
+      while (res.next()) {
+
+        var newCustomer =
+            new Customer(
+                res.getInt("customer_id"),
+                res.getString("phone"),
+                res.getString("postal_code"),
+                res.getString("address"),
+                res.getString("country"),
+                res.getString("first_name"),
+                res.getString("last_name"),
+                res.getString("email"));
+
+        customers.add(newCustomer);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return customers;
+  }
+
   @Override
-  public List<Customer> getByIds(List<Integer> ids, int limit, int offset) {
+  public List<Customer> getByIds(List<Integer> ids) {
 
     List<Customer> customers = new ArrayList<>();
 
