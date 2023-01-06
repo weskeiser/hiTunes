@@ -2,6 +2,7 @@ package com.hitunes.repositories.implementations;
 
 import com.hitunes.models.customer.Customer;
 import com.hitunes.models.customer.TopCountry;
+import com.hitunes.models.customer.TopGenre;
 import com.hitunes.repositories.interfaces.CustomerRepo;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -199,10 +200,40 @@ public class CustomerRepoImpl implements CustomerRepo {
     return country;
   }
 
+  private void appendWithNL(StringBuilder stringBuilder, String string) {
+    stringBuilder.append(string + "\n");
+  }
+
   @Override
-  public List<String> getMostPopularGenreFromOne(int id) {
-    // TODO Auto-generated method stub
-    return null;
+  public TopGenre getMostPopularGenreFromOne(int id) {
+
+    var queryBuilder = new StringBuilder();
+    appendWithNL(queryBuilder, "SELECT g.name as genre, COUNT(*)");
+    appendWithNL(queryBuilder, "FROM genre g");
+    appendWithNL(queryBuilder, "INNER JOIN track t ON t.genre_id = g.genre_id");
+    appendWithNL(queryBuilder, "INNER JOIN invoice_line il ON il.track_id = t.track_id");
+    appendWithNL(queryBuilder, "INNER JOIN invoice i ON i.invoice_id = il.invoice_id");
+    appendWithNL(queryBuilder, "WHERE i.customer_id = ?");
+    appendWithNL(queryBuilder, "GROUP BY g.name");
+    appendWithNL(queryBuilder, "ORDER BY count DESC");
+    appendWithNL(queryBuilder, "LIMIT 1;");
+
+    TopGenre topGenre = null;
+
+    try (var conn = getConnection()) {
+
+      var statement = conn.prepareStatement(queryBuilder.toString());
+      statement.setInt(1, id);
+
+      var res = statement.executeQuery();
+
+      if (res.next()) topGenre = new TopGenre(res.getString("genre"), res.getString("count"));
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return topGenre;
   }
 
   @Override

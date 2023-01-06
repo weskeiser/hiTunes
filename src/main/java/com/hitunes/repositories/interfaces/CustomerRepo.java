@@ -2,6 +2,7 @@ package com.hitunes.repositories.interfaces;
 
 import com.hitunes.models.customer.Customer;
 import com.hitunes.models.customer.TopCountry;
+import com.hitunes.models.customer.TopGenre;
 import java.util.*;
 
 public interface CustomerRepo extends CrudRepo<Customer, Integer> {
@@ -14,7 +15,7 @@ public interface CustomerRepo extends CrudRepo<Customer, Integer> {
 
   Customer getTopSpender(int id);
 
-  List<String> getMostPopularGenreFromOne(int id);
+  TopGenre getMostPopularGenreFromOne(int id);
 
   TopCountry getCountryWithMostCustomers();
 }

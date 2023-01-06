@@ -32,7 +32,10 @@ public class PgAppRunner implements ApplicationRunner {
     // var customerPage = customerRepo.getPage(0, 10);
     // System.out.println(customerPage);
 
-    var topCountry = customerRepo.getCountryWithMostCustomers();
-    System.out.println(topCountry);
+    // var topCountry = customerRepo.getCountryWithMostCustomers();
+    // System.out.println(topCountry);
+
+    var topGenre = customerRepo.getMostPopularGenreFromOne(11);
+    System.out.println(topGenre);
   }
 }
