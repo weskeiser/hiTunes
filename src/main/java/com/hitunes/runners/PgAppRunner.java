@@ -1,7 +1,6 @@
 package com.hitunes.runners;
 
 import com.hitunes.repositories.interfaces.CustomerRepo;
-import java.util.List;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -26,11 +25,14 @@ public class PgAppRunner implements ApplicationRunner {
     // var customers = customerRepo.getAll();
     // System.out.println(customers);
 
-    List<Integer> ids = List.of(1, 2, 3);
-    var customersByIds = customerRepo.getByIds(ids);
-    System.out.println(customersByIds);
+    // List<Integer> ids = List.of(1, 2, 3);
+    // var customersByIds = customerRepo.getByIds(ids);
+    // System.out.println(customersByIds);
 
     // var customerPage = customerRepo.getPage(0, 10);
     // System.out.println(customerPage);
+
+    var topCountry = customerRepo.getCountryWithMostCustomers();
+    System.out.println(topCountry);
   }
 }

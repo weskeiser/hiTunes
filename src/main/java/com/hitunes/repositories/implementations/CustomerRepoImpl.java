@@ -1,6 +1,7 @@
 package com.hitunes.repositories.implementations;
 
 import com.hitunes.models.customer.Customer;
+import com.hitunes.models.customer.TopCountry;
 import com.hitunes.repositories.interfaces.CustomerRepo;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -177,9 +178,25 @@ public class CustomerRepoImpl implements CustomerRepo {
   }
 
   @Override
-  public String getCountryWithMostCustomers() {
-    // TODO Auto-generated method stub
-    return null;
+  public TopCountry getCountryWithMostCustomers() {
+
+    var query = "select country from customer GROUP BY country ORDER BY count(*) DESC limit 1";
+
+    TopCountry country = null;
+
+    try (var conn = getConnection()) {
+
+      var statement = conn.prepareStatement(query);
+
+      var res = statement.executeQuery();
+
+      if (res.next()) country = new TopCountry(res.getString("country"));
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return country;
   }
 
   @Override
