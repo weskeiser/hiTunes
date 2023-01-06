@@ -2,7 +2,11 @@ package com.hitunes.repositories.implementations;
 
 import com.hitunes.models.customer.Customer;
 import com.hitunes.repositories.interfaces.CustomerRepo;
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +30,39 @@ public class CustomerRepoImpl implements CustomerRepo {
     this.password = password;
   }
 
+  private List<Customer> fetchCustomers(PreparedStatement statement) throws SQLException {
+
+    List<Customer> customers = new ArrayList<>();
+
+    var res = statement.executeQuery();
+
+    while (res.next()) {
+
+      var customer = fetchCustomer(res);
+
+      customers.add(customer);
+    }
+
+    return customers;
+  }
+
+  private Customer fetchCustomer(ResultSet res) throws SQLException {
+    return new Customer(
+        res.getInt("customer_id"),
+        res.getString("phone"),
+        res.getString("postal_code"),
+        res.getString("address"),
+        res.getString("country"),
+        res.getString("first_name"),
+        res.getString("last_name"),
+        res.getString("email"));
+  }
+
+  private Connection getConnection() throws SQLException {
+    return DriverManager.getConnection(url, username, password);
+  }
+  ;
+
   @Override
   public Optional<Customer> get(Customer customer) {
     return null;
@@ -34,32 +71,18 @@ public class CustomerRepoImpl implements CustomerRepo {
   @Override
   public List<Customer> getByName(String lastName, String firstName) {
 
-    List<Customer> customers = new ArrayList<>();
-
     var query = "select * from customer where last_name = ? and first_name = ? ";
 
-    try (var conn = DriverManager.getConnection(url, username, password)) {
+    List<Customer> customers = new ArrayList<>();
+
+    try (var conn = getConnection()) {
 
       var statement = conn.prepareStatement(query);
       statement.setString(1, lastName);
       statement.setString(2, firstName);
 
-      var res = statement.executeQuery();
+      customers = fetchCustomers(statement);
 
-      while (res.next()) {
-        Customer customer =
-            new Customer(
-                res.getInt("customer_id"),
-                res.getString("phone"),
-                res.getString("postal_code"),
-                res.getString("address"),
-                res.getString("country"),
-                res.getString("first_name"),
-                res.getString("last_name"),
-                res.getString("email"));
-
-        customers.add(customer);
-      }
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -69,27 +92,19 @@ public class CustomerRepoImpl implements CustomerRepo {
 
   @Override
   public Optional<Customer> getById(Integer id) throws Exception {
+
+    var query = "select * from customer where customer_id = ?";
+
     Customer customer = null;
 
-    var query = "select * from customer where customer_id = " + id + ";";
-
-    try (var conn = DriverManager.getConnection(url, username, password)) {
+    try (var conn = getConnection()) {
 
       var statement = conn.prepareStatement(query);
+      statement.setInt(1, id);
 
       var res = statement.executeQuery();
 
-      if (res.next())
-        customer =
-            new Customer(
-                res.getInt("customer_id"),
-                res.getString("phone"),
-                res.getString("postal_code"),
-                res.getString("address"),
-                res.getString("country"),
-                res.getString("first_name"),
-                res.getString("last_name"),
-                res.getString("email"));
+      if (res.next()) customer = fetchCustomer(res);
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -100,33 +115,18 @@ public class CustomerRepoImpl implements CustomerRepo {
 
   public List<Customer> getPage(int offset, int limit) {
 
-    List<Customer> customers = new ArrayList<>();
-
     var query = "select * from customer ORDER BY last_name OFFSET ? LIMIT ?; ";
 
-    try (var conn = DriverManager.getConnection(url, username, password)) {
+    List<Customer> customers = new ArrayList<>();
+
+    try (var conn = getConnection()) {
 
       var statement = conn.prepareStatement(query);
       statement.setInt(1, offset);
       statement.setInt(2, limit);
 
-      var res = statement.executeQuery();
+      customers = fetchCustomers(statement);
 
-      while (res.next()) {
-
-        var newCustomer =
-            new Customer(
-                res.getInt("customer_id"),
-                res.getString("phone"),
-                res.getString("postal_code"),
-                res.getString("address"),
-                res.getString("country"),
-                res.getString("first_name"),
-                res.getString("last_name"),
-                res.getString("email"));
-
-        customers.add(newCustomer);
-      }
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -137,32 +137,18 @@ public class CustomerRepoImpl implements CustomerRepo {
   @Override
   public List<Customer> getByIds(List<Integer> ids) {
 
-    List<Customer> customers = new ArrayList<>();
+    var idsInParens = ids.toString().replace("[", "(").replace("]", ")");
 
-    var idsInParens = (ids.toString().replace("[", "(").replace("]", ")"));
     var query = "select * from customer where customer_id in " + idsInParens;
 
-    try (var conn = DriverManager.getConnection(url, username, password)) {
+    List<Customer> customers = new ArrayList<>();
+
+    try (var conn = getConnection()) {
 
       var statement = conn.prepareStatement(query);
 
-      var res = statement.executeQuery();
+      customers = fetchCustomers(statement);
 
-      while (res.next()) {
-
-        var newCustomer =
-            new Customer(
-                res.getInt("customer_id"),
-                res.getString("phone"),
-                res.getString("postal_code"),
-                res.getString("address"),
-                res.getString("country"),
-                res.getString("first_name"),
-                res.getString("last_name"),
-                res.getString("email"));
-
-        customers.add(newCustomer);
-      }
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -173,30 +159,15 @@ public class CustomerRepoImpl implements CustomerRepo {
   @Override
   public List<Customer> getAll() {
 
-    List<Customer> customers = new ArrayList<>();
-
     var query = "select * from customer";
 
-    try (var conn = DriverManager.getConnection(url, username, password)) {
+    List<Customer> customers = new ArrayList<>();
+
+    try (var conn = getConnection()) {
 
       var statement = conn.prepareStatement(query);
 
-      var res = statement.executeQuery();
-
-      while (res.next()) {
-        Customer customer =
-            new Customer(
-                res.getInt("customer_id"),
-                res.getString("phone"),
-                res.getString("postal_code"),
-                res.getString("address"),
-                res.getString("country"),
-                res.getString("first_name"),
-                res.getString("last_name"),
-                res.getString("email"));
-
-        customers.add(customer);
-      }
+      customers = fetchCustomers(statement);
 
     } catch (Exception e) {
       e.printStackTrace();
