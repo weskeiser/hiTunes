@@ -1,9 +1,10 @@
-package com.hitunes.repositories.implementations;
+package com.hitunes.services;
 
-import com.hitunes.models.customer.Customer;
-import com.hitunes.models.customer.TopCountry;
-import com.hitunes.models.customer.TopGenre;
-import com.hitunes.repositories.interfaces.CustomerRepo;
+import com.hitunes.models.Customer;
+import com.hitunes.models.TopCountry;
+import com.hitunes.models.TopGenre;
+import com.hitunes.models.TopSpender;
+import com.hitunes.repositories.CustomerRepo;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -39,9 +40,7 @@ public class CustomerRepoImpl implements CustomerRepo {
     var res = statement.executeQuery();
 
     while (res.next()) {
-
       var customer = fetchCustomer(res);
-
       customers.add(customer);
     }
 
@@ -73,7 +72,7 @@ public class CustomerRepoImpl implements CustomerRepo {
   @Override
   public List<Customer> getByName(String lastName, String firstName) {
 
-    var query = "select * from customer where last_name = ? and first_name = ? ";
+    var query = "select * from customer where last_name like ? and first_name like ? ";
 
     List<Customer> customers = new ArrayList<>();
 
@@ -200,29 +199,25 @@ public class CustomerRepoImpl implements CustomerRepo {
     return country;
   }
 
-  private void appendWithNL(StringBuilder stringBuilder, String string) {
-    stringBuilder.append(string + "\n");
-  }
-
   @Override
   public TopGenre getMostPopularGenreFromOne(int id) {
 
-    var queryBuilder = new StringBuilder();
-    appendWithNL(queryBuilder, "SELECT g.name as genre, COUNT(*)");
-    appendWithNL(queryBuilder, "FROM genre g");
-    appendWithNL(queryBuilder, "INNER JOIN track t ON t.genre_id = g.genre_id");
-    appendWithNL(queryBuilder, "INNER JOIN invoice_line il ON il.track_id = t.track_id");
-    appendWithNL(queryBuilder, "INNER JOIN invoice i ON i.invoice_id = il.invoice_id");
-    appendWithNL(queryBuilder, "WHERE i.customer_id = ?");
-    appendWithNL(queryBuilder, "GROUP BY g.name");
-    appendWithNL(queryBuilder, "ORDER BY count DESC");
-    appendWithNL(queryBuilder, "LIMIT 1;");
+    var query =
+        ("SELECT g.name as genre, COUNT(*)"
+            + " FROM genre g"
+            + " INNER JOIN track t ON t.genre_id = g.genre_id"
+            + " INNER JOIN invoice_line il ON il.track_id = t.track_id"
+            + " INNER JOIN invoice i ON i.invoice_id = il.invoice_id"
+            + " WHERE i.customer_id = ?"
+            + " GROUP BY g.name"
+            + " ORDER BY count DESC"
+            + " LIMIT 1");
 
     TopGenre topGenre = null;
 
     try (var conn = getConnection()) {
 
-      var statement = conn.prepareStatement(queryBuilder.toString());
+      var statement = conn.prepareStatement(query);
       statement.setInt(1, id);
 
       var res = statement.executeQuery();
@@ -237,13 +232,37 @@ public class CustomerRepoImpl implements CustomerRepo {
   }
 
   @Override
-  public Customer getTopSpender(int id) {
-    // TODO Auto-generated method stub
-    return null;
+  public TopSpender getTopSpender() {
+
+    TopSpender topSpender = null;
+
+    var query =
+        ("select *, sum(total)"
+            + " from customer c"
+            + " inner join invoice i on c.customer_id = i.customer_id"
+            + " group by c.customer_id, i.invoice_id"
+            + " order by sum(total) desc"
+            + " limit 1");
+
+    try (var conn = getConnection()) {
+
+      var statement = conn.prepareStatement(query);
+
+      var res = statement.executeQuery();
+      res.next();
+
+      topSpender = new TopSpender(fetchCustomer(res), res.getInt("sum"));
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return topSpender;
   }
 
   @Override
   public void createNew(Customer object) {
+
     // TODO Auto-generated method stub
 
   }

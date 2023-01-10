@@ -1,4 +1,4 @@
-package com.hitunes.models.customer;
+package com.hitunes.models;
 
 public record Customer(
     int customerId,

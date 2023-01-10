@@ -1,10 +1,13 @@
-package com.hitunes.repositories.interfaces;
+package com.hitunes.repositories;
 
-import com.hitunes.models.customer.Customer;
-import com.hitunes.models.customer.TopCountry;
-import com.hitunes.models.customer.TopGenre;
+import com.hitunes.models.Customer;
+import com.hitunes.models.TopCountry;
+import com.hitunes.models.TopGenre;
+import com.hitunes.models.TopSpender;
 import java.util.*;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface CustomerRepo extends CrudRepo<Customer, Integer> {
 
   List<Customer> getByName(String lastName, String firstName);
@@ -13,7 +16,7 @@ public interface CustomerRepo extends CrudRepo<Customer, Integer> {
 
   List<Customer> getPage(int offset, int limit);
 
-  Customer getTopSpender(int id);
+  TopSpender getTopSpender();
 
   TopGenre getMostPopularGenreFromOne(int id);
 

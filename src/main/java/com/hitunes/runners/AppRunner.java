@@ -1,15 +1,15 @@
 package com.hitunes.runners;
 
-import com.hitunes.repositories.interfaces.CustomerRepo;
+import com.hitunes.repositories.CustomerRepo;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PgAppRunner implements ApplicationRunner {
+public class AppRunner implements ApplicationRunner {
   private final CustomerRepo customerRepo;
 
-  public PgAppRunner(CustomerRepo customerRepo) {
+  public AppRunner(CustomerRepo customerRepo) {
     this.customerRepo = customerRepo;
   }
 
@@ -35,7 +35,10 @@ public class PgAppRunner implements ApplicationRunner {
     // var topCountry = customerRepo.getCountryWithMostCustomers();
     // System.out.println(topCountry);
 
-    var topGenre = customerRepo.getMostPopularGenreFromOne(11);
+    var topGenre = customerRepo.getMostPopularGenreFromOne(1);
     System.out.println(topGenre);
+
+    var topSpender = customerRepo.getTopSpender();
+    System.out.println(topSpender);
   }
 }

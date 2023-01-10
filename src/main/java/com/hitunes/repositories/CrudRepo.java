@@ -1,4 +1,5 @@
-package com.hitunes.repositories.interfaces;
+package com.hitunes.repositories;
+
 
 import java.util.List;
 import java.util.Optional;
