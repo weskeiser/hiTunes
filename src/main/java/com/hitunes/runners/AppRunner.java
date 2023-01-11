@@ -1,6 +1,8 @@
 package com.hitunes.runners;
 
+import com.hitunes.models.Customer;
 import com.hitunes.repositories.CustomerRepo;
+import java.util.Optional;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -15,11 +17,16 @@ public class AppRunner implements ApplicationRunner {
 
   @Override
   public void run(ApplicationArguments args) throws Exception {
+    Customer punk =
+        new Customer(
+            63, "0118999811999119", "12345", "Address", "Country", "Raft", "Punk", "daft@punk.no");
+    // customerRepo.createNew(punk);
+    // customerRepo.delete(punk);
 
-    // Optional<Customer> customer = customerRepo.getById(1);
-    // System.out.println(customer);
+    Optional<Customer> customer = customerRepo.getById(62);
+    System.out.println(customer);
 
-    // var customersByName = customerRepo.getByName("Gonçalves", "Luís");
+    // var customersByName = customerRepo.getByName( "Luís", "Gonçalves");
     // System.out.println(customersByName);
 
     // var customers = customerRepo.getAll();
@@ -35,10 +42,10 @@ public class AppRunner implements ApplicationRunner {
     // var topCountry = customerRepo.getCountryWithMostCustomers();
     // System.out.println(topCountry);
 
-    var topGenre = customerRepo.getMostPopularGenreFromOne(1);
-    System.out.println(topGenre);
-
-    var topSpender = customerRepo.getTopSpender();
-    System.out.println(topSpender);
+    // var topGenre = customerRepo.getMostPopularGenreFromOne(1);
+    // System.out.println(topGenre);
+    //
+    // var topSpender = customerRepo.getTopSpender();
+    // System.out.println(topSpender);
   }
 }
