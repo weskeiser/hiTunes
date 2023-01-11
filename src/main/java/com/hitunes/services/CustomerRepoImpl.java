@@ -14,24 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 public class CustomerRepoImpl implements CustomerRepo {
 
-  private final String url;
-  private final String username;
-  private final String password;
+  @Value("${spring.datasource.url}")
+  private String url;
 
-  public CustomerRepoImpl(
-      @Value("${spring.datasource.url}") String url,
-      @Value("${spring.datasource.username}") String username,
-      @Value("${spring.datasource.password}") String password) {
+  @Value("${spring.datasource.username}")
+  private String username;
 
-    this.url = url;
-    this.username = username;
-    this.password = password;
-  }
+  @Value("${spring.datasource.password}")
+  private String password;
 
   /**
    * Returns a list of Customer records from the database.
