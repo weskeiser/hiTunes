@@ -1,6 +1,7 @@
 package com.hitunes.services;
 
 import com.hitunes.models.Customer;
+import com.hitunes.models.CustomerPage;
 import com.hitunes.models.TopCountry;
 import com.hitunes.models.TopGenre;
 import com.hitunes.models.TopSpender;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class CustomerRepoImpl implements CustomerRepo {
-
   @Value("${spring.datasource.url}")
   private String url;
 
@@ -91,7 +91,6 @@ public class CustomerRepoImpl implements CustomerRepo {
     List<Customer> customers = new ArrayList<>();
 
     try (var conn = getConnection()) {
-
       var query = "select * from customer where last_name like ? and first_name like ? ";
 
       var statement = conn.prepareStatement(query);
@@ -110,7 +109,7 @@ public class CustomerRepoImpl implements CustomerRepo {
   }
 
   @Override
-  public Optional<Customer> getById(Integer customerId) throws Exception {
+  public Optional<Customer> getById(Integer customerId) {
 
     Customer customer = null;
 
@@ -135,7 +134,7 @@ public class CustomerRepoImpl implements CustomerRepo {
   }
 
   @Override
-  public List<Customer> getPage(int offset, int limit) {
+  public CustomerPage getPage(int offset, int limit) {
 
     List<Customer> customers = new ArrayList<>();
 
@@ -155,7 +154,7 @@ public class CustomerRepoImpl implements CustomerRepo {
       e.printStackTrace();
     }
 
-    return customers;
+    return new CustomerPage(customers, offset, limit);
   }
 
   @Override
@@ -244,14 +243,27 @@ public class CustomerRepoImpl implements CustomerRepo {
               + " WHERE i.customer_id = ?"
               + " GROUP BY g.name"
               + " ORDER BY count DESC"
-              + " LIMIT 1");
+              + " LIMIT 2");
 
       var statement = conn.prepareStatement(query);
       statement.setInt(1, customerId);
 
       var res = statement.executeQuery();
 
-      if (res.next()) topGenre = new TopGenre(res.getString("genre"), res.getString("count"));
+      res.next();
+
+      var topGenres = List.of(res.getString("genre"));
+      var topGenreCount = res.getInt("count");
+
+      while (res.next()) {
+
+        if (res.getInt("count") == topGenreCount) {
+          topGenres.add(res.getString("genre"));
+        } else break;
+      }
+      ;
+
+      topGenre = new TopGenre(customerId, topGenres, topGenreCount);
 
       statement.close();
 
