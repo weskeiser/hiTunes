@@ -38,10 +38,10 @@ public class AppRunner implements ApplicationRunner {
     // printTopGenre(3);
     // printCustomersByName("Luís", "Gonçalves");
     // printCustomersByIds(List.of(1, 2, 3));
-    printCustomerPage(10, 2);
+    // printCustomerPage(10, 2);
     // createNewCustomer(punk);
     // updateCustomer(punk);
-    // printCustomerById(65);
+    printCustomerById(65);
   }
 
   private void printCustomerPage(int offset, int limit) {
