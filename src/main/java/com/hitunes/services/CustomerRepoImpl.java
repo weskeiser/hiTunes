@@ -86,7 +86,7 @@ public class CustomerRepoImpl implements CustomerRepo {
   ;
 
   @Override
-  public List<Customer> getByName(String firstName, String lastName) {
+  public List<Customer> getByName(String firstName, String lastName) throws SQLException {
 
     List<Customer> customers = new ArrayList<>();
 
@@ -102,14 +102,14 @@ public class CustomerRepoImpl implements CustomerRepo {
       statement.close();
 
     } catch (Exception e) {
-      e.printStackTrace();
+      throw e;
     }
 
     return customers;
   }
 
   @Override
-  public Optional<Customer> getById(Integer customerId) {
+  public Optional<Customer> getById(Integer customerId) throws SQLException {
 
     Customer customer = null;
 
@@ -127,14 +127,14 @@ public class CustomerRepoImpl implements CustomerRepo {
       statement.close();
 
     } catch (Exception e) {
-      e.printStackTrace();
+      throw e;
     }
 
     return Optional.ofNullable(customer);
   }
 
   @Override
-  public CustomerPage getPage(int offset, int limit) {
+  public CustomerPage getPage(int offset, int limit) throws SQLException {
 
     List<Customer> customers = new ArrayList<>();
 
@@ -151,14 +151,14 @@ public class CustomerRepoImpl implements CustomerRepo {
       statement.close();
 
     } catch (Exception e) {
-      e.printStackTrace();
+      throw e;
     }
 
     return new CustomerPage(customers, offset, limit);
   }
 
   @Override
-  public List<Customer> getByIds(List<Integer> customerIds) {
+  public List<Customer> getByIds(List<Integer> customerIds) throws SQLException {
 
     List<Customer> customers = new ArrayList<>();
 
@@ -175,14 +175,14 @@ public class CustomerRepoImpl implements CustomerRepo {
       statement.close();
 
     } catch (Exception e) {
-      e.printStackTrace();
+      throw e;
     }
 
     return customers;
   }
 
   @Override
-  public List<Customer> getAll() {
+  public List<Customer> getAll() throws SQLException {
 
     List<Customer> customers = new ArrayList<>();
 
@@ -197,14 +197,14 @@ public class CustomerRepoImpl implements CustomerRepo {
       statement.close();
 
     } catch (Exception e) {
-      e.printStackTrace();
+      throw e;
     }
 
     return customers;
   }
 
   @Override
-  public TopCountry getCountryWithMostCustomers() {
+  public TopCountry getCountryWithMostCustomers() throws SQLException {
 
     TopCountry country = null;
 
@@ -220,15 +220,15 @@ public class CustomerRepoImpl implements CustomerRepo {
 
       statement.close();
 
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (SQLException e) {
+      throw e;
     }
 
     return country;
   }
 
   @Override
-  public TopGenre getMostPopularGenreFromOne(int customerId) {
+  public TopGenre getMostPopularGenreFromOne(int customerId) throws SQLException {
 
     TopGenre topGenre = null;
 
@@ -267,15 +267,15 @@ public class CustomerRepoImpl implements CustomerRepo {
 
       statement.close();
 
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (SQLException e) {
+      throw e;
     }
 
     return topGenre;
   }
 
   @Override
-  public TopSpender getTopSpender() {
+  public TopSpender getTopSpender() throws SQLException {
 
     TopSpender topSpender = null;
 
@@ -299,14 +299,14 @@ public class CustomerRepoImpl implements CustomerRepo {
       statement.close();
 
     } catch (Exception e) {
-      e.printStackTrace();
+      throw e;
     }
 
     return topSpender;
   }
 
   @Override
-  public void createNew(Customer customer) {
+  public void createNew(Customer customer) throws SQLException {
 
     try (Connection conn = getConnection()) {
 
@@ -327,12 +327,12 @@ public class CustomerRepoImpl implements CustomerRepo {
       statement.close();
 
     } catch (Exception e) {
-      e.printStackTrace();
+      throw e;
     }
   }
 
   @Override
-  public void delete(Customer customer) {
+  public void delete(Customer customer) throws SQLException {
 
     var query = "delete from customer where customer_id = ?";
 
@@ -345,12 +345,12 @@ public class CustomerRepoImpl implements CustomerRepo {
       statement.close();
 
     } catch (Exception e) {
-      e.printStackTrace();
+      throw e;
     }
   }
 
   @Override
-  public void deleteById(Integer customerId) {
+  public void deleteById(Integer customerId) throws SQLException {
 
     var query = "delete from customer where customer_id = ?";
 
@@ -363,13 +363,40 @@ public class CustomerRepoImpl implements CustomerRepo {
       statement.close();
 
     } catch (Exception e) {
-      e.printStackTrace();
+      throw e;
     }
   }
 
   @Override
-  public void update(Customer customer) {
-    // TODO Auto-generated method stub
+  public void update(Customer customer) throws SQLException {
+    try (Connection conn = getConnection()) {
 
+      String query =
+          "UPDATE customer SET"
+              + " first_name = ?,"
+              + " last_name = ?,"
+              + " phone = ?,"
+              + " postal_code = ?,"
+              + " address = ?,"
+              + " country = ?,"
+              + " email = ?"
+              + " WHERE customer_id = ?";
+
+      PreparedStatement statement = conn.prepareStatement(query);
+      statement.setString(1, customer.firstName());
+      statement.setString(2, customer.lastName());
+      statement.setString(3, customer.phoneNumber());
+      statement.setString(4, customer.postalCode());
+      statement.setString(5, customer.address());
+      statement.setString(6, customer.country());
+      statement.setString(7, customer.email());
+      statement.setInt(8, customer.customerId());
+
+      statement.executeUpdate();
+      statement.close();
+
+    } catch (Exception e) {
+      throw e;
+    }
   }
 }
