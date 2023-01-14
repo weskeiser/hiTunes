@@ -24,7 +24,7 @@ public interface CrudRepo<T, U> extends Repository<T, U> {
   /**
    * Returns all instances of the type in a list.
    *
-   * @return all entities
+   * @return all entries
    * @throws SQLException if there is an error with the database request.
    */
   List<T> getAll() throws SQLException;
