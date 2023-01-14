@@ -1,19 +1,9 @@
 package com.hitunes.services;
 
-import com.hitunes.models.Customer;
-import com.hitunes.models.CustomerPage;
-import com.hitunes.models.TopCountry;
-import com.hitunes.models.TopGenre;
-import com.hitunes.models.TopSpender;
+import com.hitunes.models.*;
 import com.hitunes.repositories.CustomerRepo;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.sql.*;
+import java.util.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 

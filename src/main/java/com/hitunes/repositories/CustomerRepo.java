@@ -1,10 +1,6 @@
 package com.hitunes.repositories;
 
-import com.hitunes.models.Customer;
-import com.hitunes.models.CustomerPage;
-import com.hitunes.models.TopCountry;
-import com.hitunes.models.TopGenre;
-import com.hitunes.models.TopSpender;
+import com.hitunes.models.*;
 import java.sql.SQLException;
 import java.util.*;
 import org.springframework.stereotype.Repository;
