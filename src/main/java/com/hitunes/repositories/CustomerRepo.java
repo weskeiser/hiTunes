@@ -3,7 +3,6 @@ package com.hitunes.repositories;
 import com.hitunes.models.*;
 import java.sql.SQLException;
 import java.util.*;
-import org.springframework.stereotype.Repository;
 
 /**
  * Repository interface for operations on {@link Customer} objects.
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Repository;
  * @version 1.0
  * @since 1.0
  */
-@Repository
 public interface CustomerRepo extends CrudRepo<Customer, Integer> {
 
   /**

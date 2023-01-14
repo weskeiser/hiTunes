@@ -19,7 +19,6 @@ import org.springframework.data.repository.Repository;
  * @param <T> the type of the objects to be managed
  * @param <U> the type of the identifier of the objects
  */
-@org.springframework.stereotype.Repository
 public interface CrudRepo<T, U> extends Repository<T, U> {
 
   /**
