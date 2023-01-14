@@ -18,39 +18,40 @@ import java.util.*;
 public interface CustomerRepo extends CrudRepo<Customer, Integer> {
 
   /**
-   * Retrieves all Customer entities matching the full name and returns them in a list.
+   * Retrieves all {@link Customer} entries matching the full name and returns them in a list.
    *
    * @param lastName case sensitive string
    * @param firstName case sensitive string
-   * @return a list of Customer entities
+   * @return a list of Customer entries
    * @throws SQLException if there is an error with the database request.
    */
   List<Customer> getByName(String lastName, String firstName) throws SQLException;
 
   /**
-   * Retrieves all Customer entities with ID's matching the customerIds param and returns them in a
+   * Retrieves all {@link Customer} entries with ID's matching the customerIds param and returns them in a
    * list.
    *
    * @param customerIds a list of customer ID's
-   * @return a list of Customer entities
+   * @return a list of Customer entries
    * @throws SQLException if there is an error with the database request.
    */
   List<Customer> getByIds(List<Integer> customerIds) throws SQLException;
 
   /**
-   * Retrieves a set amount of Customer entities and returns them in a list.
+   * Retrieves a set amount of {@link Customer} entries and returns them in a list.
    *
    * <p>Ordered by last_name.
    *
    * @param offset at what index to begin fetching customers
    * @param limit how many customers to fetch
-   * @return an object containaing a list of Customer entities and the offset and limit.
+   * @return an object containaing a list of Customer entries from the database, as well as the
+   *     offset and limit.
    * @throws SQLException if there is an error with the database request.
    */
   CustomerPage getPage(int offset, int limit) throws SQLException;
 
   /**
-   * Calculates the Customer entitity with the highest spending and returns it.
+   * Calculates the {@link Customer} entitity with the highest spending and returns it.
    *
    * @return an object containing the Customer entity with the highest spending, and the amount
    *     spent.
@@ -59,7 +60,7 @@ public interface CustomerRepo extends CrudRepo<Customer, Integer> {
   TopSpender getTopSpender() throws SQLException;
 
   /**
-   * Calculates the most popular genre(s) from a given Customer entity and returns them.
+   * Calculates the most popular genre(s) from a given {@link Customer} entity and returns them.
    *
    * <p>Retrieves the top genre, or all the top genres if more than one share top position.
    *

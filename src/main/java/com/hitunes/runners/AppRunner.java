@@ -30,18 +30,26 @@ public class AppRunner implements ApplicationRunner {
             "Punk",
             "daft@punk.no");
 
+    printTopCountry();
     // printAllCustomers();
-    // printTopCountry();
     // printTopSpender();
-    // printTopGenre(3);
+    // printTopGenre(2);
     // printCustomersByName("Luís", "Gonçalves");
     // printCustomersByIds(List.of(1, 2, 3));
     // printCustomerPage(10, 2);
     // createNewCustomer(punk);
     // updateCustomer(punk);
-    printCustomerById(65);
+    // printCustomerById(65);
   }
 
+  /**
+   * Prints a page of {@link Customer} entries from the database.
+   *
+   * <p>Ordered by last_name.
+   *
+   * @param offset integer representing depth offset
+   * @param limit integer representing amount of customers to fetch
+   */
   private void printCustomerPage(int offset, int limit) {
     try {
       var customerPage = customerRepo.getPage(offset, limit);
@@ -52,6 +60,14 @@ public class AppRunner implements ApplicationRunner {
     }
   }
 
+  /**
+   * Search for customers by name.
+   *
+   * <p>Prints a list of {@link Customer} entries from the database.
+   *
+   * @param firstName string
+   * @param lastName string
+   */
   private void printCustomersByName(String firstName, String lastName) {
     try {
       var customersByName = customerRepo.getByName(firstName, lastName);
@@ -62,6 +78,11 @@ public class AppRunner implements ApplicationRunner {
     }
   }
 
+  /**
+   * Prints a list of {@link Customer} entries from the database.
+   *
+   * @param ids list of {@link Customer} IDs (integers)
+   */
   private void printCustomersByIds(List<Integer> ids) {
     try {
 
@@ -73,6 +94,7 @@ public class AppRunner implements ApplicationRunner {
     }
   }
 
+  /** Prints all the {@link Customer} entries from the database. */
   private void printAllCustomers() {
     try {
       var customers = customerRepo.getAll();
@@ -82,6 +104,7 @@ public class AppRunner implements ApplicationRunner {
     }
   }
 
+  /** Prints the {@link Customer} that is the top spender. */
   private void printTopSpender() {
     try {
       var topSpender = customerRepo.getTopSpender();
@@ -92,6 +115,7 @@ public class AppRunner implements ApplicationRunner {
     }
   }
 
+  /** Prints the country with the most customers. */
   private void printTopCountry() {
     try {
       var topCountry = customerRepo.getCountryWithMostCustomers();
@@ -102,6 +126,11 @@ public class AppRunner implements ApplicationRunner {
     }
   }
 
+  /**
+   * Prints a {@Customer} entry from the database.
+   *
+   * @param customerId a valid customer id (integer)
+   */
   private void printCustomerById(int customerId) {
     try {
       Optional<Customer> customer = customerRepo.getById(customerId);
@@ -114,6 +143,11 @@ public class AppRunner implements ApplicationRunner {
     }
   }
 
+  /**
+   * Inserts a new customer into the database.
+   *
+   * @param customer a {@link Customer} record
+   */
   private void createNewCustomer(Customer customer) {
     try {
       customerRepo.createNew(customer);
@@ -122,6 +156,11 @@ public class AppRunner implements ApplicationRunner {
     }
   }
 
+  /**
+   * Updates a {@link Customer} in the database by overwriting it.
+   *
+   * @param customer a {@link Customer} record containing a valid ID.
+   */
   private void updateCustomer(Customer customer) {
     try {
       customerRepo.update(customer);
@@ -130,6 +169,11 @@ public class AppRunner implements ApplicationRunner {
     }
   }
 
+  /**
+   * Prints the top genre for a given customer.
+   *
+   * @param id a valid {@link Customer} ID (integer)
+   */
   private void printTopGenre(int id) {
     try {
       var topGenre = customerRepo.getMostPopularGenreFromOne(id);

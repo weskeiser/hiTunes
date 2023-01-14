@@ -19,7 +19,7 @@ public class CustomerRepoImpl implements CustomerRepo {
   private String password;
 
   /**
-   * Returns a list of Customer records from the database.
+   * Returns a list of {@link Customer} records from the database.
    *
    * <p>Expects a PreparedStatement containing a query that returns one or more customers.
    *
@@ -43,7 +43,7 @@ public class CustomerRepoImpl implements CustomerRepo {
   }
 
   /**
-   * Returns a Customer record.
+   * Returns a {@link Customer} record.
    *
    * @param res A ResultSet containing the required fields
    * @return A Customer record
