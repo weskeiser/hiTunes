@@ -20,6 +20,7 @@ public class AppRunner implements ApplicationRunner {
 
   @Override
   public void run(ApplicationArguments args) throws Exception {
+
     Customer punk =
         new Customer(
             65,
@@ -36,9 +37,8 @@ public class AppRunner implements ApplicationRunner {
     // printTopSpender();
     // printTopGenre(3);
     // printCustomersByName("Luís", "Gonçalves");
-    printCustomersByName("Luís", "Gonçalves");
     // printCustomersByIds(List.of(1, 2, 3));
-    // printCustomerPage(10, 2);
+    printCustomerPage(10, 2);
     // createNewCustomer(punk);
     // updateCustomer(punk);
     // printCustomerById(65);
