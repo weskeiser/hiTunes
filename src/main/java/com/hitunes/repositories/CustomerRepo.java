@@ -25,7 +25,7 @@ public interface CustomerRepo extends CrudRepo<Customer, Integer> {
    * @param lastName case sensitive string
    * @param firstName case sensitive string
    * @return a list of Customer entities
-   * @throws SQLException if there is an error retrieving the customers from the database.
+   * @throws SQLException if there is an error with the database request.
    */
   List<Customer> getByName(String lastName, String firstName) throws SQLException;
 
@@ -35,7 +35,7 @@ public interface CustomerRepo extends CrudRepo<Customer, Integer> {
    *
    * @param customerIds a list of customer ID's
    * @return a list of Customer entities
-   * @throws SQLException if there is an error retrieving the customers from the database.
+   * @throws SQLException if there is an error with the database request.
    */
   List<Customer> getByIds(List<Integer> customerIds) throws SQLException;
 
@@ -47,7 +47,7 @@ public interface CustomerRepo extends CrudRepo<Customer, Integer> {
    * @param offset at what index to begin fetching customers
    * @param limit how many customers to fetch
    * @return an object containaing a list of Customer entities and the offset and limit.
-   * @throws SQLException if there is an error retrieving the customers from the database.
+   * @throws SQLException if there is an error with the database request.
    */
   CustomerPage getPage(int offset, int limit) throws SQLException;
 
@@ -56,7 +56,7 @@ public interface CustomerRepo extends CrudRepo<Customer, Integer> {
    *
    * @return an object containing the Customer entity with the highest spending, and the amount
    *     spent.
-   * @throws SQLException if there is an error retrieving the customer from the database.
+   * @throws SQLException if there is an error with the database request.
    */
   TopSpender getTopSpender() throws SQLException;
 
@@ -70,7 +70,7 @@ public interface CustomerRepo extends CrudRepo<Customer, Integer> {
    *
    * @param customerId an integer representing a valid customer id
    * @return a list of genres with the most most popular genre(s)
-   * @throws SQLException if there is an error retrieving the genre from the database.
+   * @throws SQLException if there is an error with the database request.
    */
   TopGenre getMostPopularGenreFromOne(int customerId) throws SQLException;
 
@@ -78,7 +78,7 @@ public interface CustomerRepo extends CrudRepo<Customer, Integer> {
    * Calculates the country with the most customers in the database and returns it.
    *
    * @return a TopCountry object containing a String representing the top country.
-   * @throws SQLException if there is an error retrieving the country from the database.
+   * @throws SQLException if there is an error with the database request.
    */
   TopCountry getCountryWithMostCustomers() throws SQLException;
 }

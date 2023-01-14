@@ -26,20 +26,40 @@ public interface CrudRepo<T, U> extends Repository<T, U> {
    * Returns all instances of the type in a list.
    *
    * @return all entities
-   * @throws SQLException if there is an error retrieving the customers from the database.
+   * @throws SQLException if there is an error with the database request.
    */
   List<T> getAll() throws SQLException;
 
   /**
-   * @param entity
-   * @throws SQLException if there is an error creating the customer.
+   * Inserts a new entry of the entity in the database.
+   *
+   * @param entity containing all the required fields
+   * @throws SQLException if there is an error with the database request.
    */
   void createNew(T entity) throws SQLException;
 
+  /**
+   * Updates the entity entry in the database by overwriting it. Entity must contain a valid ID.
+   *
+   * @param entity containing a valid ID.
+   * @throws SQLException if there is an error with the database request.
+   */
   void update(T entity) throws SQLException;
 
+  /**
+   * Deletes the entity entry in the database. Entity must contain a valid ID.
+   *
+   * @param entity containing a valid ID.
+   * @throws SQLException if there is an error with the database request.
+   */
   void delete(T entity) throws SQLException;
 
+  /**
+   * Deletes the entity entry in the database.
+   *
+   * @param id must be a valid ID
+   * @throws SQLException if there is an error with the database request.
+   */
   void deleteById(U id) throws SQLException;
 
   /**
@@ -47,7 +67,7 @@ public interface CrudRepo<T, U> extends Repository<T, U> {
    *
    * @param id must not be null.
    * @return the entity with the given id or {@literal Optional#empty()} if none found.
-   * @throws SQLException if there is an error retrieving the customer from the database.
+   * @throws SQLException if there is an error with the database request.
    */
   Optional<T> getById(U id) throws SQLException;
 }
