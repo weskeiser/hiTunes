@@ -5,6 +5,7 @@ import com.hitunes.models.CustomerPage;
 import com.hitunes.models.TopCountry;
 import com.hitunes.models.TopGenre;
 import com.hitunes.models.TopSpender;
+import java.sql.SQLException;
 import java.util.*;
 import org.springframework.stereotype.Repository;
 
@@ -28,8 +29,9 @@ public interface CustomerRepo extends CrudRepo<Customer, Integer> {
    * @param lastName case sensitive string
    * @param firstName case sensitive string
    * @return a list of Customer entities
+   * @throws SQLException if there is an error retrieving the customers from the database.
    */
-  List<Customer> getByName(String lastName, String firstName);
+  List<Customer> getByName(String lastName, String firstName) throws SQLException;
 
   /**
    * Retrieves all Customer entities with ID's matching the customerIds param and returns them in a
@@ -37,8 +39,9 @@ public interface CustomerRepo extends CrudRepo<Customer, Integer> {
    *
    * @param customerIds a list of customer ID's
    * @return a list of Customer entities
+   * @throws SQLException if there is an error retrieving the customers from the database.
    */
-  List<Customer> getByIds(List<Integer> customerIds);
+  List<Customer> getByIds(List<Integer> customerIds) throws SQLException;
 
   /**
    * Retrieves a set amount of Customer entities and returns them in a list.
@@ -48,16 +51,18 @@ public interface CustomerRepo extends CrudRepo<Customer, Integer> {
    * @param offset at what index to begin fetching customers
    * @param limit how many customers to fetch
    * @return an object containaing a list of Customer entities and the offset and limit.
+   * @throws SQLException if there is an error retrieving the customers from the database.
    */
-  CustomerPage getPage(int offset, int limit);
+  CustomerPage getPage(int offset, int limit) throws SQLException;
 
   /**
    * Calculates the Customer entitity with the highest spending and returns it.
    *
    * @return an object containing the Customer entity with the highest spending, and the amount
    *     spent.
+   * @throws SQLException if there is an error retrieving the customer from the database.
    */
-  TopSpender getTopSpender();
+  TopSpender getTopSpender() throws SQLException;
 
   /**
    * Calculates the most popular genre(s) from a given Customer entity and returns them.
@@ -69,13 +74,15 @@ public interface CustomerRepo extends CrudRepo<Customer, Integer> {
    *
    * @param customerId an integer representing a valid customer id
    * @return a list of genres with the most most popular genre(s)
+   * @throws SQLException if there is an error retrieving the genre from the database.
    */
-  TopGenre getMostPopularGenreFromOne(int customerId);
+  TopGenre getMostPopularGenreFromOne(int customerId) throws SQLException;
 
   /**
    * Calculates the country with the most customers in the database and returns it.
    *
    * @return a TopCountry object containing a String representing the top country.
+   * @throws SQLException if there is an error retrieving the country from the database.
    */
-  TopCountry getCountryWithMostCustomers();
+  TopCountry getCountryWithMostCustomers() throws SQLException;
 }
