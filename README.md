@@ -1,4 +1,3 @@
-[![Java CI with Maven](https://github.com/weskeiser/hiTunes/actions/workflows/maven.yml/badge.svg)](https://github.com/weskeiser/hiTunes/actions/workflows/maven.yml)
 `Noroff Assignment #05`
 
 [![Java CI with Maven](https://github.com/weskeiser/hiTunes/actions/workflows/maven.yml/badge.svg)](https://github.com/weskeiser/hiTunes/actions/workflows/maven.yml)
@@ -13,8 +12,6 @@ A simple execution of assignment #05. Fun fact: the only software used for this 
 
 ##### `/.github/workflows/maven.yml`
 GitHub Actions workflow document that triggers a build when commiting to the main branch. Runs `mvn -B package --file pom.xml` to verify the project builds successfully.
-
----
 
 ##### `/src/main/java/com/hitunes`
 
